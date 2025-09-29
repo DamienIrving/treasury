@@ -1,8 +1,8 @@
 #!/bin/bash
 #PBS -P wp00
-#PBS -q hugemem
-#PBS -l walltime=10:00:00
-#PBS -l mem=200GB
+#PBS -q normal
+#PBS -l walltime=5:00:00
+#PBS -l mem=120GB
 #PBS -l storage=gdata/xv83+gdata/ia39+gdata/fs38
 #PBS -l wd
 #PBS -l ncpus=1
