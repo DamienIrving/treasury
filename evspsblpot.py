@@ -1,5 +1,5 @@
 """Command line program for calculating potential evapotranspiration (evspsblpot)"""
-import pdb
+
 import argparse
 
 import numpy as np
@@ -23,7 +23,7 @@ def fix_metadata(ds, input_ds):
     ds.attrs = input_ds.attrs
     ds['lat'].attrs = input_ds['lat'].attrs
     ds['lon'].attrs = input_ds['lon'].attrs
-    #ds['time'].attrs = input_ds['time'].attrs
+    ds['time'].attrs = input_ds['time'].attrs
     ds['evspsblpot'].attrs['long_name'] = 'Potential Evapotranspiration'
     ds['evspsblpot'].attrs['standard_name'] = 'water_potential_evaporation_flux'
 
@@ -38,7 +38,7 @@ def main(args):
 
     tasmax_ds = xr.open_mfdataset(args.tasmax_file)
     tasmin_ds = xr.open_mfdataset(args.tasmin_file)
-    
+
     evspsblpot_da = xc.indices.potential_evapotranspiration(
         tasmin=tasmin_ds['tasmin'],
         tasmax=tasmax_ds['tasmax'],
