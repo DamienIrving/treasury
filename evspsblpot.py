@@ -55,8 +55,8 @@ if __name__ == '__main__':
         description=__doc__,
         formatter_class=argparse.RawDescriptionHelpFormatter
     )
-    parser.add_argument("tasmin_file", type=str, help="input daily minimum temperature files")
-    parser.add_argument("tasmax_file", type=str, help="input daily maximum temperature files")
+    parser.add_argument("tasmin_file", type=str, help="input daily minimum temperature file")
+    parser.add_argument("tasmax_file", type=str, help="input daily maximum temperature file")
     parser.add_argument("outfile", type=str, help="output file name")
     args = parser.parse_args()
     main(args)
