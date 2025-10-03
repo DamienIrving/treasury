@@ -1,0 +1,27 @@
+#!/bin/bash
+#PBS -P xv83
+#PBS -q normal
+#PBS -l walltime=10:00:00
+#PBS -l mem=120GB
+#PBS -l storage=gdata/xv83+gdata/ia39+gdata/fs38
+#PBS -l wd
+#PBS -l ncpus=1
+
+__conda_setup="$('/g/data/xv83/dbi599/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/g/data/xv83/dbi599/miniconda3/etc/profile.d/conda.sh" ]; then
+        . "/g/data/xv83/dbi599/miniconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="/g/data/xv83/dbi599/miniconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+
+conda activate unseen
+
+command="bash evspsblpot.sh /g/data/fs38/publications/CMIP6/CMIP/CSIRO/ACCESS-ESM1-5/historical/r1i1p1f1/day/tasmin/gn/latest/tasmin_day_ACCESS-ESM1-5_historical_r1i1p1f1_gn_19500101-19991231.nc /g/data/fs38/publications/CMIP6/CMIP/CSIRO/ACCESS-ESM1-5/historical/r1i1p1f1/day/tasmin/gn/latest/tasmin_day_ACCESS-ESM1-5_historical_r1i1p1f1_gn_20000101-20141231.nc /g/data/fs38/publications/CMIP6/ScenarioMIP/CSIRO/ACCESS-ESM1-5/ssp370/r1i1p1f1/day/tasmin/gn/latest/*.nc"
+echo ${command}
+${command}
+
