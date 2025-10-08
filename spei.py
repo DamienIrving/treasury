@@ -22,7 +22,7 @@ def main(args):
     wb.attrs['units'] = pr_ds['pr'].attrs['units']
 
     spei_da = xc.indices.standardized_precipitation_evapotranspiration_index(
-        wb, freq='MS', window=12, cal_start='1950-01-01', cal_end='2014-12-31'
+        wb, freq='MS', window=12, cal_start='1950-01-01', cal_end='2014-12-31', dist=args.dist,
     )   
 
     spei_ds = spei_da.to_dataset(name='SPEI')
@@ -39,6 +39,7 @@ if __name__ == '__main__':
     parser.add_argument("outfile", type=str, help="output file name")
     parser.add_argument("--pr_files", type=str, nargs='*', help="input daily precipitation files")
     parser.add_argument("--evspsblpot_files", type=str, nargs='*', help="input daily potential evapotranspiration files")
+    parser.add_argument("--dist", type=str, choices=('gamma', 'fisk'), default='fisk', help="distribution for SPEI calculation")
 
     args = parser.parse_args()
     main(args)
