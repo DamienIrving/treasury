@@ -21,7 +21,12 @@ unset __conda_setup
 
 conda activate unseen
 
-command="/g/data/xv83/dbi599/miniconda3/envs/unseen/bin/python /home/599/dbi599/treasury/spei.py /g/data/xv83/dbi599/treasury/spei-allen98_mon_ACCESS-ESM1-5_ssp370_r1i1p1f1_gn_195001-210012.nc --pr_files /g/data/fs38/publications/CMIP6/CMIP/CSIRO/ACCESS-ESM1-5/historical/r1i1p1f1/day/pr/gn/latest/pr_day_ACCESS-ESM1-5_historical_r1i1p1f1_gn_19500101-19991231.nc /g/data/fs38/publications/CMIP6/CMIP/CSIRO/ACCESS-ESM1-5/historical/r1i1p1f1/day/pr/gn/latest/pr_day_ACCESS-ESM1-5_historical_r1i1p1f1_gn_20000101-20141231.nc /g/data/fs38/publications/CMIP6/ScenarioMIP/CSIRO/ACCESS-ESM1-5/ssp370/r1i1p1f1/day/pr/gn/latest/pr_day_ACCESS-ESM1-5_ssp370_r1i1p1f1_gn_*.nc --evspsblpot_files /g/data/xv83/dbi599/treasury/evspsblpot-allen98_day_ACCESS-ESM1-5_*.nc"
+evspsblpot_method=hargreaves85
+# hargreaves85 allen98
+dist=fisk
+# fisk gamma
+
+command="/g/data/xv83/dbi599/miniconda3/envs/unseen/bin/python /home/599/dbi599/treasury/spei.py /g/data/xv83/dbi599/treasury/spei-${dist}-${evspsblpot_method}_mon_ACCESS-ESM1-5_ssp370_r1i1p1f1_gn_195001-210012.nc --dist ${dist} --pr_files /g/data/fs38/publications/CMIP6/CMIP/CSIRO/ACCESS-ESM1-5/historical/r1i1p1f1/day/pr/gn/latest/pr_day_ACCESS-ESM1-5_historical_r1i1p1f1_gn_19500101-19991231.nc /g/data/fs38/publications/CMIP6/CMIP/CSIRO/ACCESS-ESM1-5/historical/r1i1p1f1/day/pr/gn/latest/pr_day_ACCESS-ESM1-5_historical_r1i1p1f1_gn_20000101-20141231.nc /g/data/fs38/publications/CMIP6/ScenarioMIP/CSIRO/ACCESS-ESM1-5/ssp370/r1i1p1f1/day/pr/gn/latest/pr_day_ACCESS-ESM1-5_ssp370_r1i1p1f1_gn_*.nc --evspsblpot_files /g/data/xv83/dbi599/treasury/evspsblpot-${evspsblpot_method}_day_ACCESS-ESM1-5_*.nc"
 echo ${command}
 ${command}
 
