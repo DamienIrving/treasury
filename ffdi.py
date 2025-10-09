@@ -1,5 +1,5 @@
 """Command line program for calculating the Forest Fire Danger Index (FFDI)"""
-
+import pdb
 import argparse
 
 import numpy as np
@@ -38,15 +38,19 @@ def main(args):
 
     # Drought Factor
     kbdi_ds = xr.open_mfdataset(args.kbdi_files)
-    pr_ds = xr.open_mfdataset(args.pr_files)
+    ntime = len(kbdi_ds['KBDI'].time)
+    nlat = len(kbdi_ds['KBDI'].lat)
+    nlon = len(kbdi_ds['KBDI'].lon)
+    kbdi_ds = kbdi_ds.chunk({'time': ntime, 'lat': nlat, 'lon': nlon})
+    pr_ds = xr.open_dataset(args.pr_zarr, engine='zarr')
     pr_ds['pr'] = xc.core.units.convert_units_to(pr_ds['pr'], 'mm/day')
-    df_da = xc.indices.griffiths_drought_factor(pr_ds['pr'], kbdi_ds['kbdi'])
+    df_da = xc.indices.griffiths_drought_factor(pr_ds['pr'], kbdi_ds['KBDI'])
 
     # FFDI
-    tasmax_ds = xr.open_dataset(args.tasmax_files)
+    tasmax_ds = xr.open_dataset(args.tasmax_zarr, engine='zarr')
     #tasmax_ds['tasmax'] = xc.core.units.convert_units_to(tasmax_ds['tasmax'], 'degC')
-    hursmin_ds = xr.open_dataset(args.hursmin_file)
-    sfcWindmax_ds = xr.open_dataset(args.sfcWindmax_file)
+    hursmin_ds = xr.open_dataset(args.hursmin_zarr, engine='zarr')
+    sfcWindmax_ds = xr.open_dataset(args.sfcWindmax_zarr, engine='zarr')
     ffdi_da = xc.indices.mcarthur_forest_fire_danger_index(
         df_da,
         tasmax_ds['tasmax'],
@@ -64,10 +68,10 @@ if __name__ == '__main__':
         formatter_class=argparse.RawDescriptionHelpFormatter
     )
     parser.add_argument("outfile", type=str, help="output file name")
-    parser.add_argument("--pr_files", nargs='*', type=str, help="input daily precipitation files")
-    parser.add_argument("--tasmax_files", type=str, help="input daily maximum temperature files")
-    parser.add_argument("--hursmin_files", type=str, help="input daily minimum relative humidity files")
-    parser.add_argument("--sfcWindmax_files", type=str, help="input daily maximum surface wind speed files")
-    parser.add_argument("--kbdi_files", type=str, help="input daily Keetch-Byram Drought Index files")
+    parser.add_argument("--pr_zarr", type=str, help="input daily precipitation zarr collection")
+    parser.add_argument("--tasmax_zarr", type=str, help="input daily maximum temperature zarr collection")
+    parser.add_argument("--hursmin_zarr", type=str, help="input daily minimum relative humidity zarr collection")
+    parser.add_argument("--sfcWindmax_zarr", type=str, help="input daily maximum surface wind speed zarr collection")
+    parser.add_argument("--kbdi_files", type=str, nargs='*', help="input daily Keetch-Byram Drought Index files")
     args = parser.parse_args()
     main(args)
