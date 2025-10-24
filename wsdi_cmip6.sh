@@ -30,15 +30,20 @@ outdir=/g/data/xv83/dbi599/treasury/WSDI/${model}/${ssp}
 
 histfiles=(`ls ${indir}/CMIP6/CMIP/*/${model}/historical/${run}/day/tasmax/${grid}/${version}/*.nc`)
 sspfiles=(`ls ${indir}/CMIP6/ScenarioMIP/*/${model}/${ssp}/${run}/day/tasmax/${grid}/${version}/*.nc`)
-outfile=wsdi_yr_${model}_${ssp}_${run}_${grid}_18500101-21001231.nc
+nc_outfile=wsdi_yr_${model}_${ssp}_${run}_${grid}_1850-2100.nc
+csv_outfile=wsdi_yr_${model}_${ssp}_${run}_aus-states-cities_1850-2100.csv
     
-command="${python} /home/599/dbi599/treasury/wsdi.py ${histfiles[@]} ${sspfiles[@]} ${outdir}/${outfile}"
+nc_command="${python} /home/599/dbi599/treasury/wsdi.py ${histfiles[@]} ${sspfiles[@]} ${outdir}/${nc_outfile}"
+csv_command="${python} /home/599/dbi599/treasury/nc_to_csv.py ${outdir}/${nc_outfile} WSDI ${outdir}/${csv_outfile} --add_cities"
 if [[ "${flags}" == "-n" ]] ; then
-    echo ${command}
+    echo ${nc_command}
+    echo ${csv_command}
 else
     mkdir -p ${outdir}
-    ${command}
-    echo ${outdir}/${outfile}
+    echo ${nc_command}
+    ${nc_command}
+    echo ${csv_command}
+    ${csv_command}
 fi
 
 
