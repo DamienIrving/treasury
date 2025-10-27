@@ -196,8 +196,9 @@ def main(args):
     df = df.round(decimals=2)
     if args.add_cities:
         df = add_cities(ds[args.var], df, index)
-    
-    df.insert(loc=0, column='experiment', value=np.where(df.index > 2014, ds.attrs['experiment_id'], 'historical'))
+
+    hist_limit = '2015' if type(df.index[0]) == str else 2014
+    df.insert(loc=0, column='experiment', value=np.where(df.index > hist_limit, ds.attrs['experiment_id'], 'historical'))
     df.insert(loc=0, column='run', value=ds.attrs['variant_label'])
     df.insert(loc=0, column='model', value=ds.attrs['source_id'])
     df.to_csv(args.outfile, index=True, index_label=index_label)

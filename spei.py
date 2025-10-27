@@ -15,8 +15,8 @@ dask.diagnostics.ProgressBar().register()
 def main(args):
     """Run the program."""
 
-    pr_ds = xr.open_mfdataset(args.pr_files)
-    evspsblpot_ds = xr.open_mfdataset(args.evspsblpot_files)
+    pr_ds = xr.open_mfdataset(args.pr_files, attrs_file=args.pr_files[-1])
+    evspsblpot_ds = xr.open_mfdataset(args.evspsblpot_files, attrs_file=args.evspsblpot_files[-1])
     
     wb = pr_ds['pr'] - evspsblpot_ds['evspsblpot']
     wb.attrs['units'] = pr_ds['pr'].attrs['units']
