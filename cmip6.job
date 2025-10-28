@@ -27,7 +27,7 @@ unset __conda_setup
 
 conda activate unseen
 
-command="bash /home/599/dbi599/treasury/${metric}_cmip6.sh ${model} ${ssp} ${run} ${grid} ${version}"
+command="bash /home/599/dbi599/treasury/${metric}_cmip6.sh ${model} ${ssp} ${run} ${grid} ${version} -e"
 echo ${command}
 ${command}
 

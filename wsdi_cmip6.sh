@@ -7,7 +7,8 @@
 #   ssp:             ssp126 ssp245 ssp370 ssp585
 #   run:             r?i?p?i?
 #   grid:            gn
-#   flags:           optional flags (e.g. -n for dry run)
+#   version:         vYYYYMMDD
+#   flags:           optional flags (e.g. -e for execute; -c for clean up)
 #
 
 model=$1
@@ -35,15 +36,19 @@ csv_outfile=wsdi_yr_${model}_${ssp}_${run}_aus-states-cities_1850-2100.csv
     
 nc_command="${python} /home/599/dbi599/treasury/wsdi.py ${histfiles[@]} ${sspfiles[@]} ${outdir}/${nc_outfile}"
 csv_command="${python} /home/599/dbi599/treasury/nc_to_csv.py ${outdir}/${nc_outfile} WSDI ${outdir}/${csv_outfile} --add_cities"
-if [[ "${flags}" == "-n" ]] ; then
-    echo ${nc_command}
-    echo ${csv_command}
-else
+if [[ "${flags}" == "-e" ]] ; then
     mkdir -p ${outdir}
     echo ${nc_command}
     ${nc_command}
     echo ${csv_command}
     ${csv_command}
+else
+    echo ${nc_command}
+    echo ${csv_command}
+fi
+
+if [[ "${flags}" == "-c" ]] ; then
+    rm ${nc_outfile}
 fi
 
 

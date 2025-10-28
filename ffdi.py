@@ -59,7 +59,18 @@ def main(args):
     )
     ffdi_ds = ffdi_da.to_dataset(name='FFDI')
     ffdi_ds = fix_metadata(ffdi_ds, tasmax_ds)
-    ffdi_ds.to_netcdf(args.outfile)
+#    ffdi_ds.to_netcdf(args.outfile)
+
+    # Metrics
+    FFDIx_da = ffdi_ds['FFDI'].resample({'time': 'YE'}).max('time', keep_attrs=True)
+    FFDIx_ds = FFDIx_da.to_dataset(name='FFDIx')
+    FFDIx_ds.to_netcdf(args.FFDIx_outfile)
+
+    FFDI99p_da = ffdi_ds['FFDI'].sel(time=slice('1950-01-01', '2014-12-31')).quantile(0.99, dim='time')
+    FFDIgt99p_da = ffdi_ds['FFDI'] > FFDI99p_da
+    FFDIgt99p_da = FFDIgt99p.resample({'time': 'YE'}).sum('time', keep_attrs=True)
+    FFDIgt99p_ds = FFDIgt99p_da.to_dataset(name='FFDIgt99p')
+    FFDIgt99p_ds.to_netcdf(args.FFDIgt99p_outfile)
 
 
 if __name__ == '__main__':
@@ -67,7 +78,8 @@ if __name__ == '__main__':
         description=__doc__,
         formatter_class=argparse.RawDescriptionHelpFormatter
     )
-    parser.add_argument("outfile", type=str, help="output file name")
+    parser.add_argument("FFDIx_outfile", type=str, help="FFDIx output file name")
+    parser.add_argument("FFDIgt99p_outfile", type=str, help="FFDIgt99p output file name")
     parser.add_argument("--pr_zarr", type=str, help="input daily precipitation zarr collection")
     parser.add_argument("--tasmax_zarr", type=str, help="input daily maximum temperature zarr collection")
     parser.add_argument("--hursmin_zarr", type=str, help="input daily minimum relative humidity zarr collection")

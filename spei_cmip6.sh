@@ -7,7 +7,8 @@
 #   ssp:             ssp126 ssp245 ssp370 ssp585
 #   run:             r?i?p?i?
 #   grid:            gn
-#   flags:           optional flags (e.g. -n for dry run)
+#   version:         vYYYYMMDD
+#   flags:           optional flags (e.g. -e for execute; -c for clean up)
 #
 
 model=$1
@@ -41,12 +42,12 @@ for tasmin_path in "${tasmin_files[@]}"; do
     evspsblpot_path=${spei_dir}/${evspsblpot_file}
     evspsblpot_files+=(${evspsblpot_path})
     command="${python} /home/599/dbi599/treasury/evspsblpot.py ${evspsblpot_path} ${method} --tasmin_file ${tasmin_path} --tasmax_file ${tasmax_path}"
-    if [[ "${flags}" == "-n" ]] ; then
-        echo ${command}
-    else
+    if [[ "${flags}" == "-e" ]] ; then
         mkdir -p ${spei_dir}
         echo ${command}
         ${command}
+    else
+        echo ${command}
     fi 
 done
 
@@ -59,14 +60,18 @@ csv_path=${spei_dir}/spei_mon_${model}_${ssp}_${run}_aus-states_1850-2100.csv
 
 spei_command="${python} /home/599/dbi599/treasury/spei.py ${spei_path} --dist fisk --pr_files ${pr_hist_files[@]} ${pr_ssp_files[@]} --evspsblpot_files ${evspsblpot_files[@]}"
 csv_command="${python} /home/599/dbi599/treasury/nc_to_csv.py ${spei_path} SPEI ${csv_path}"
-if [[ "${flags}" == "-n" ]] ; then
-    echo ${spei_command}
-    echo ${csv_command}
-else
+if [[ "${flags}" == "-e" ]] ; then
     echo ${spei_command}
     ${spei_command}
     echo ${csv_command}
     ${csv_command}
+else
+    echo ${spei_command}
+    echo ${csv_command}
 fi
 
+if [[ "${flags}" == "-c" ]] ; then
+    rm ${evspsblpot_files[@]}
+    rm ${spei_path}
+fi
 
