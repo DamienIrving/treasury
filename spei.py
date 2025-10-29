@@ -1,5 +1,5 @@
 """Command line program for calculating the Standardised Precipitation Evaporation Index (SPEI)"""
-import pdb
+
 import argparse
 
 import numpy as np

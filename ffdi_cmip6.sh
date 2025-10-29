@@ -72,7 +72,7 @@ for var in pr tasmax hursmin sfcWindmax; do
     end_date=`echo ${end_date} | cut -d . -f 1`
     zarr_file=${ffdi_dir}/${var}_day_${model}_${ssp}_${run}_${grid}_${start_date}-${end_date}.zarr
     declare ${var}_zarr_file=${zarr_file}
-    zarr_command="${python} /home/599/dbi599/treasury/nc_to_rechunked_zarr.py ${hist_files[@]} ${ssp_files[@]} ${var} ${zarr_file} /g/data/xv83/dbi599/treasury/temp.zarr"
+    zarr_command="/g/data/xv83/dbi599/miniconda3/envs/agcd/bin/python /home/599/dbi599/treasury/nc_to_rechunked_zarr.py ${hist_files[@]} ${ssp_files[@]} ${var} ${zarr_file} /g/data/xv83/dbi599/treasury/temp.zarr"
     if [[ "${flags}" == "-e" ]] ; then
         echo ${zarr_command}
         ${zarr_command}

@@ -1,5 +1,5 @@
 """Command line program for calculating the Forest Fire Danger Index (FFDI)"""
-import pdb
+
 import argparse
 
 import numpy as np
@@ -37,7 +37,7 @@ def main(args):
     """Run the program."""
 
     # Drought Factor
-    kbdi_ds = xr.open_mfdataset(args.kbdi_files)
+    kbdi_ds = xr.open_mfdataset(args.kbdi_files, attrs_file=args.kbdi_files[-1])
     ntime = len(kbdi_ds['KBDI'].time)
     nlat = len(kbdi_ds['KBDI'].lat)
     nlon = len(kbdi_ds['KBDI'].lon)
@@ -59,17 +59,18 @@ def main(args):
     )
     ffdi_ds = ffdi_da.to_dataset(name='FFDI')
     ffdi_ds = fix_metadata(ffdi_ds, tasmax_ds)
-#    ffdi_ds.to_netcdf(args.outfile)
 
     # Metrics
     FFDIx_da = ffdi_ds['FFDI'].resample({'time': 'YE'}).max('time', keep_attrs=True)
     FFDIx_ds = FFDIx_da.to_dataset(name='FFDIx')
+    FFDIx_ds.attrs = ffdi_ds.attrs
     FFDIx_ds.to_netcdf(args.FFDIx_outfile)
 
     FFDI99p_da = ffdi_ds['FFDI'].sel(time=slice('1950-01-01', '2014-12-31')).quantile(0.99, dim='time')
     FFDIgt99p_da = ffdi_ds['FFDI'] > FFDI99p_da
-    FFDIgt99p_da = FFDIgt99p.resample({'time': 'YE'}).sum('time', keep_attrs=True)
+    FFDIgt99p_da = FFDIgt99p_da.resample({'time': 'YE'}).sum('time', keep_attrs=True)
     FFDIgt99p_ds = FFDIgt99p_da.to_dataset(name='FFDIgt99p')
+    FFDIgt99p_ds.attrs = ffdi_ds.attrs
     FFDIgt99p_ds.to_netcdf(args.FFDIgt99p_outfile)
 
 

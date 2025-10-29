@@ -45,7 +45,7 @@ def main(args):
     """Run the command line program."""
 
     assert not os.path.isdir(args.output_zarr), f"Output Zarr collection already exists: {args.output_zarr}"
-    ds = xr.open_mfdataset(args.infiles, preprocess=drop_vars)
+    ds = xr.open_mfdataset(args.infiles, preprocess=drop_vars, attrs_file=args.infiles[-1])
     coords = list(ds.coords)
     chunks = ds[args.var].encoding['chunksizes']
     input_chunks = {}
