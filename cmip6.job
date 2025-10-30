@@ -2,7 +2,7 @@
 #PBS -P xv83
 #PBS -q normal
 #PBS -l walltime=5:00:00
-#PBS -l mem=120GB
+#PBS -l mem=100GB
 #PBS -l storage=gdata/xv83+gdata/ia39+gdata/fs38+gdata/oi10
 #PBS -l wd
 #PBS -l ncpus=1
@@ -11,7 +11,7 @@
 # Examples:
 #   qsub -v metric=wsdi,model=ACCESS-ESM1-5,ssp=ssp370,run=r1i1p1f1,grid=gn,version=latest cmip6.job
 #   qsub -v metric=spei,model=CanESM5,ssp=ssp245,run=r1i1p1f1,grid=gn,version=v20190429 cmip6.job
-
+#   qsub -v metric=wsdi,model=MPI-ESM1-2-LR,ssp=ssp370,run=r25i1p1f1,grid=gn,version='v*' cmip6.job
 
 __conda_setup="$('/g/data/xv83/dbi599/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
 if [ $? -eq 0 ]; then
