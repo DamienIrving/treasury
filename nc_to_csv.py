@@ -193,22 +193,17 @@ def main(args):
     spatial_means = ds[args.var].weighted(frac * weights).mean(dim=("lat", "lon"))
     df = spatial_means.to_pandas()
     df.columns = spatial_means['abbrevs']
-    if args.var == 'SPEI':
-        index = df.index.strftime('%Y-%m')
-        index_label = 'year-month'
-    else:
-        index = df.index.year
-        index_label = 'year'
-    df.index = index
     df = df.round(decimals=2)
     if args.add_cities:
         df = add_cities(ds[args.var], df, index)
-
-    hist_limit = '2015' if type(df.index[0]) == str else 2014
-    df.insert(loc=0, column='experiment', value=np.where(df.index > hist_limit, ds.attrs['experiment_id'], 'historical'))
+    df.insert(loc=0, column='experiment', value=np.where(df.index >= '2015-01-01', ds.attrs['experiment_id'], 'historical'))
     df.insert(loc=0, column='run', value=ds.attrs['variant_label'])
     df.insert(loc=0, column='model', value=ds.attrs['source_id'])
-    df.to_csv(args.outfile, index=True, index_label=index_label)
+    year = df.index.strftime('%Y-%m')
+    if args.var == 'SPEI':
+        df.insert(loc=0, column='month', value=df.index.month)
+    df.insert(loc=0, column='year', value=df.index.year)
+    df.to_csv(args.outfile, index=False)
 
 
 if __name__ == '__main__':
