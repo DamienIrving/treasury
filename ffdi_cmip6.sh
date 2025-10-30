@@ -76,7 +76,6 @@ for var in pr tasmax hursmin sfcWindmax; do
     if [[ "${flags}" == "-e" ]] ; then
         echo ${zarr_command}
         ${zarr_command}
-        rm -r /g/data/xv83/dbi599/treasury/temp.zarr
     else
         echo ${zarr_command}
     fi
