@@ -7,7 +7,7 @@
 #   ssp:             ssp126 ssp245 ssp370 ssp585
 #   run:             r?i?p?i?
 #   grid:            gn
-#   version:         vYYYYMMDD
+#   version:         vYYYYMMDD or 'v*'
 #   flags:           optional flags (e.g. -e for execute; -c for clean up)
 #
 

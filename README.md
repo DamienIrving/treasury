@@ -14,6 +14,8 @@ Don't forget to clean up afterwards (i.e. delete all files except the final csv 
 bash wsdi_cmip6.sh MPI-ESM1-2-LR ssp370 r25i1p1f1 gn 'v*' -c 
 ```
 
+(The data generation and clean up steps can be achived by running `run.sh`.)
+
 The ensemble of runs used for the WSDI and SPEI
 are all models that archived daily data for at least five common runs
 across ssp126, ssp245, ssp370 and ssp585:
