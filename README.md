@@ -1,28 +1,30 @@
 ## Data for Reserve Bank of Australia (RBA) economic modelling
 
-The RBA requires climate data out to 2100 relating to heatwaves, droughts and bushfires.
+The RBA requires climate data out to 2100 relating to heatwaves, droughts, bushfires, storms and floods.
 
 ### Metrics
 
 The following metrics were selected:
 - *Warm Spell Duration Index (WSDI)*:
-  The number of days in a sequence of at least six consecutive days
+  This heatwave indicator represents the number of days in a sequence of at least six consecutive days
   during which the value of the daily maximum temperature (tasmax)
   is greater than the 90th percentile of tasmax calculated for a five-day window centered on each calendar day,
   using all data for the given calendar daypentad from the data period for a reference climate (1950-2014). 
 - *Standardised Precipitation Evapotranspiration Index (SPEI)*:
-  A measure of the integrated water deficit in a location,
+  This drought indicator is a measure of the integrated water deficit in a location,
   taking into account the contributions of both precipitation (pr) and temperature dependent evapotranspiration.
   The water deficit values are "standardised" (i.e. transformed to a normal distribution) when calculating the SPEI,
   such that SPEI values represent standard deviations. 
   The integration period for this production is 12 months (i.e. the SPEI-12).
 - *Forest Fire Danger Index (FFDI)*:
-  A numeric indicator of the potential danger of a forest fire,
-  based on the weather conditions only
+  This indicator of the potential danger of a forest fire
+  is based on the weather conditions only
   (temperature, rainfall deficit, humidity and wind speed).
   We calculate the maximum daily FFDI value for the year (FFDIx)
   and the number of days per year above the 99th percentile (FFDIgt99p)
   of the reference period (1950-2014).
+- *Wettest day of the year (Rx1day)*:
+  The wettest day of the year (in mm of rain) was used as a very simple proxy for storms.
 
 The WSDI and SPEI were partly selected because they are also available from the
 [Climate Data Knowledge Portal](https://climateknowledgeportal.worldbank.org/country/australia/climate-data-projections),
@@ -35,8 +37,8 @@ large model ensembles were required.
 In other words, it was preferable to use data from CMIP6 climate models that performed
 multiple simulations (i.e. multiple ensemble members) for each future emission scenario.
 
-For the WSDI (which requires tasmax data)
-and SPEI (which requires tasmax, tasmin and pr data),
+For the WSDI (which requires tasmax data),
+SPEI (tasmax, tasmin and pr) and Rx1day (pr) indices
 we selected all CMIP6 models that archived daily data for at least five common runs
 across the ssp126, ssp245, ssp370 and ssp585 future emissions scenarios:
 - *EC-Earth3 (57 runs)*
@@ -70,7 +72,7 @@ grid points in arid climate zones were excluded since the FFDI isn't as appropri
 See [development/koppen_climate_zones.ipynb](https://github.com/AusClimateService/rba/blob/master/development/koppen_climate_zones.ipynb)
 and [development/ffdi-cmip6.ipynb](https://github.com/AusClimateService/rba/blob/master/development/ffdi-cmip6.ipynb) for details.
 
-For the WDSI, we also include values for each captial city,
+For the WSDI and Rx1day, we also include values for each captial city,
 which simply represent the model grid point closest to the GPO of that city.
 
 It's important to note that spatial aggregation can distort the meaning of the absolute values of some metrics.
@@ -83,8 +85,9 @@ See [example_data/wsdi_yr_ACCESS-CM2_ssp245_ensemble_aus-states-cities_1850-2100
 for an example of a data file at the end of the spatial aggregation step.
 A visualisation of those data can also be seen in the scatterplots in
 [wsdi-analysis.ipynb](https://github.com/AusClimateService/rba/blob/master/wsdi-analysis.ipynb),
-[spei-analysis.ipynb](https://github.com/AusClimateService/rba/blob/master/spei-analysis.ipynb) and
-[ffdigt99p-analysis.ipynb](https://github.com/AusClimateService/rba/blob/master/ffdigt99p-analysis.ipynb).
+[spei-analysis.ipynb](https://github.com/AusClimateService/rba/blob/master/spei-analysis.ipynb),
+[ffdigt99p-analysis.ipynb](https://github.com/AusClimateService/rba/blob/master/ffdigt99p-analysis.ipynb), and
+[rx1day-analysis.ipynb](https://github.com/AusClimateService/rba/blob/master/rx1day-analysis.ipynb).
 
 A data file from the [BARRA-R2](https://www.bom.gov.au/government-and-industry/research-and-development/research-and-development-projects/atmospheric-reanalysis)
 "observational" dataset is also included for each metric for reference
@@ -106,7 +109,7 @@ that exceed that 98th percentile threshold.
 
 This process is repeated for all years and for a dozen percentile thresholds:
 
--  Likelihood of exceeding the 90, 91, 92, 93, 94, 95, 96, 96.7, 97, 97.5, 98 and 99 percentile for WSDI and FFDIgt99p
+-  Likelihood of exceeding the 90, 91, 92, 93, 94, 95, 96, 96.7, 97, 97.5, 98 and 99 percentile for WSDI, FFDIgt99p and Rx1day
 -  Likelihood of not exceeding the 10, 9, 8, 7, 6, 5, 4, 3.3, 3, 2.5, 2 and 1 percentile for the SPEI 
 
 See [example_data/wsdi_yr_98-0p-likelihood_ACCESS-CM2_ssp245_aus-states-cities_1860-2091.csv](https://github.com/AusClimateService/rba/blob/master/example_data/wsdi_yr_98-0p-likelihood_ACCESS-CM2_ssp245_aus-states-cities_1860-2091.csv) for an example of a likelihood data file.
@@ -115,8 +118,9 @@ We also archive a data file showing the threshold values for each percentile
 
 A visualisation of the likelihood data can also be seen in the line graphs in
 [wsdi-analysis.ipynb](https://github.com/AusClimateService/rba/blob/master/wsdi-analysis.ipynb),
-[spei-analysis.ipynb](https://github.com/AusClimateService/rba/blob/master/spei-analysis.ipynb) and
-[ffdigt99p-analysis.ipynb](https://github.com/AusClimateService/rba/blob/master/ffdigt99p-analysis.ipynb).
+[spei-analysis.ipynb](https://github.com/AusClimateService/rba/blob/master/spei-analysis.ipynb),
+[ffdigt99p-analysis.ipynb](https://github.com/AusClimateService/rba/blob/master/ffdigt99p-analysis.ipynb) and
+[rx1day-analysis.ipynb](https://github.com/AusClimateService/rba/blob/master/rx1day-analysis.ipynb).
 
 ### Computation
 
