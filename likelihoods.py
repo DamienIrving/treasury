@@ -35,7 +35,7 @@ def main(args):
     runs = ' '.join(list(df['run'].unique()))
     history = cmdprov.new_log()
     metric_label = args.metric.lower()
-    locations = 'aus-states-cities' if args.metric in ['WSDI', 'Rx1day'] else 'aus-states'
+    locations = 'aus-states-cities' if args.metric in ['WSDI', 'Rx1day', 'Rx5day'] else 'aus-states'
 
     if args.metric == "SPEI":
         quantiles = np.array([0.01, 0.02, 0.025, 0.03, 0.033, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.1])
@@ -99,7 +99,7 @@ if __name__ == '__main__':
         formatter_class=argparse.RawDescriptionHelpFormatter
     )
     parser.add_argument("infile", type=str, help="input csv file name (i.e. for a given model and experiment)")
-    parser.add_argument("metric", type=str, choices=('WSDI', 'SPEI', 'FFDIx', 'FFDIgt99p', 'Rx1day'), help="input metric")
+    parser.add_argument("metric", type=str, choices=('WSDI', 'SPEI', 'FFDIx', 'FFDIgt99p', 'Rx1day', 'Rx5day'), help="input metric")
     parser.add_argument("outdir", type=str, help="output directory")
     args = parser.parse_args()
     main(args)
